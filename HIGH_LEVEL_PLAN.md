@@ -9,29 +9,41 @@
 ## Dependency Tree Overview
 
 ```
-Resume-Admin-API (Admin Backend)
-├── DEPENDS ON: Resume-SSO (admin authentication/authorization)
-├── DEPENDS ON: Resume-API Database (shared D1 database)
+Resume-Admin-API (Admin Backend Service)
+├── DEPENDS ON:
+│   ├── Resume-SSO (admin authentication/authorization with MFA)
+│   └── Resume-API Database (shared D1 database)
 │
-├── MVP-1: Admin Foundation ⟶ Blocks: Resume-Admin dashboard
+├── BLOCKS:
+│   ├── Resume-Admin (admin dashboard - requires all APIs)
+│   ├── Resume-Mobile-Admin (mobile admin - requires all APIs)
+│   └── Resume-Processor (provides analytics processing, cleanup jobs)
+
+Services that DEPEND on Resume-Admin-API:
+├── Resume-Admin (MVP-1: Dashboard functionality)
+├── Resume-Mobile-Admin (MVP-1: Mobile admin functionality)
+└── Resume-Processor (MVP-3: Analytics jobs, cleanup tasks)
+
+MVP Breakdown:
+├── MVP-1: Admin Foundation ⟶ Blocks: Resume-Admin, Resume-Mobile-Admin dashboards
 │   ├── Admin Authentication & Authorization
 │   ├── Dashboard Analytics APIs
 │   ├── User Management APIs
 │   └── Template Management APIs
 │
-├── MVP-2: Financial Operations & Support ⟶ Blocks: Payment management
+├── MVP-2: Financial Operations & Support ⟶ Blocks: Payment features in Resume-Admin, Resume-Mobile-Admin
 │   ├── Subscription Management APIs
 │   ├── Revenue Analytics
 │   ├── Coupon Management
 │   └── Support Ticket System
 │
-├── MVP-3: Content & System Management ⟶ Blocks: System operations
+├── MVP-3: Content & System Management ⟶ Blocks: System management in Resume-Admin, Resume-Processor jobs
 │   ├── Content Management
 │   ├── Website Management APIs
 │   ├── Feature Flag Management
 │   └── System Health Monitoring
 │
-└── MVP-4: Advanced Analytics & Automation ⟶ Blocks: Advanced admin features
+└── MVP-4: Advanced Analytics & Automation ⟶ Blocks: Advanced features in Resume-Admin, Resume-Processor
     ├── Custom Report Builder
     ├── A/B Testing Analytics
     ├── AI Usage Analytics
@@ -43,8 +55,8 @@ Resume-Admin-API (Admin Backend)
 ## MVP-1: Admin Foundation (Foundation)
 
 **Status**: MUST BUILD AFTER Resume-SSO admin roles are ready
-**Dependencies**: Resume-SSO (MVP-1: Basic Auth + Admin Roles), Resume-API (MVP-1.1: Database)
-**Blocks**: Resume-Admin (all admin features)
+**Dependencies**: Resume-SSO (MVP-4.3: MFA for admin access), Resume-API (MVP-1.1: Database)
+**Blocks**: Resume-Admin, Resume-Mobile-Admin (all admin features)
 
 ### Epic 1.1: Admin Authentication & Authorization
 **What**: Validate admin users and enforce role-based access
@@ -619,21 +631,30 @@ Resume-Admin-API (Admin Backend)
 
 ## What Blocks What
 
-| This Epic | Blocks These Epics |
-|-----------|-------------------|
-| MVP-1.1 (Admin Auth) | All admin operations |
-| MVP-1.2 (Analytics) | Resume-Admin dashboard |
-| MVP-1.3 (User Management) | Resume-Admin user pages |
-| MVP-2.1 (Subscriptions) | Resume-Admin billing pages |
-| MVP-2.5 (Support Tickets) | Resume-Admin support section |
-| MVP-3.3 (Feature Flags) | Release management tools |
+| This Epic | Blocks These Services/Features |
+|-----------|--------------------------------|
+| MVP-1.1 (Admin Auth) | All admin operations in Resume-Admin, Resume-Mobile-Admin |
+| MVP-1.2 (Analytics) | Dashboard in Resume-Admin, Resume-Mobile-Admin |
+| MVP-1.3 (User Management) | User pages in Resume-Admin, Resume-Mobile-Admin |
+| MVP-1.4 (Template Management) | Template control in Resume-Admin |
+| MVP-2.1 (Subscriptions) | Billing pages in Resume-Admin, Resume-Mobile-Admin |
+| MVP-2.2 (Revenue Analytics) | Financial dashboard in Resume-Admin |
+| MVP-2.5 (Support Tickets) | Support section in Resume-Admin, Resume-Mobile-Admin |
+| MVP-3.1 (Content Management) | Announcement features in Resume-Admin |
+| MVP-3.2 (Website Management) | Website control in Resume-Admin |
+| MVP-3.3 (Feature Flags) | Release management in Resume-Admin |
+| MVP-3.4 (System Health) | Monitoring dashboard in Resume-Admin |
+| MVP-4.1 (Custom Reports) | Report builder in Resume-Admin |
+| MVP-4.2 (A/B Testing) | Experiments in Resume-Admin |
+| MVP-4.3 (AI Analytics) | AI usage dashboard in Resume-Admin |
+| MVP-4.4 (Automation) | Workflow engine in Resume-Admin, Resume-Processor jobs |
 
 **External Dependencies**:
-- Resume-SSO (MVP-1: Admin Roles) ⟶ Blocks Epic 1.1 (Admin Authentication)
-- Resume-API (MVP-1.1: Database) ⟶ Blocks Epic 1.2 (Analytics) and Epic 1.3 (User Management)
-- Resume-API (MVP-2.1: Stripe) ⟶ Blocks Epic 2.1 (Subscription Management)
-- Resume-API (MVP-4: Website Generation) ⟶ Blocks Epic 3.2 (Website Management)
-- Resume-API (MVP-5: AI Features) ⟶ Blocks Epic 4.3 (AI Usage Analytics)
+- Resume-SSO (MVP-4.3: MFA) ⟶ Required for Epic 1.1 (Admin Authentication)
+- Resume-API (MVP-1.1: Database) ⟶ Required for Epic 1.2 (Analytics) and Epic 1.3 (User Management)
+- Resume-API (MVP-2.1: Stripe) ⟶ Required for Epic 2.1 (Subscription Management)
+- Resume-API (MVP-4: Website Generation) ⟶ Required for Epic 3.2 (Website Management)
+- Resume-API (MVP-5: AI Features) ⟶ Required for Epic 4.3 (AI Usage Analytics)
 
 ---
 
